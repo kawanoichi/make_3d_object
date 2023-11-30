@@ -12,16 +12,16 @@ from image_processing import ImageProcessing as ImaP
 import rotate_coordinate as rotate
 import cv2
 import open3d as o3d
-import matplotlib.pyplot as plt
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('TkAgg')
 
 
 SCRIPT_DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR_PATH = os.path.dirname(SCRIPT_DIR_PATH)
-PLY_DIR_PATH = os.path.join(PROJECT_DIR_PATH, "predict_points")
+DATA_DIR_PATH = os.path.join(PROJECT_DIR_PATH, "data")
 
 
 class MakeSurface:
@@ -234,7 +234,7 @@ class MakeSurface:
             cv2.circle(img, (x, y), 2, 0, -1)
 
         point_img = img.copy()
-        # save_path = os.path.join(PROJECT_DIR_PATH, "work", 'zikken.png')
+        # save_path = os.path.join(DATA_DIR_PATH, 'zikken.png')
         # cv2.imwrite(save_path, point_img)
 
         # エッジ検出
@@ -251,7 +251,7 @@ class MakeSurface:
             print("Error: 線が見つかりません")
             return normals
 
-        # save_path = os.path.join(PROJECT_DIR_PATH, "work", 'zikken2.png')
+        # save_path = os.path.join(DATA_DIR_PATH, 'zikken2.png')
         # cv2.imwrite(save_path, img)
 
         """
@@ -282,7 +282,7 @@ class MakeSurface:
             print("Error: 線が見つかりません")
             return normals
 
-        save_path = os.path.join(PROJECT_DIR_PATH, "work", 'zikken3.png')
+        save_path = os.path.join(DATA_DIR_PATH, 'zikken3.png')
         cv2.imwrite(save_path, img)
 
         """
@@ -350,12 +350,13 @@ class MakeSurface:
 
         # 点群や法線ベクトルの表示
         # plt.show()
-        save_path = os.path.join(PROJECT_DIR_PATH, "work", 'result.png')
+        save_path = os.path.join(DATA_DIR_PATH, 'result.png')
         plt.savefig(save_path)
 
         """
         mesh
         """
+        # """
         # 新しい法線ベクトルの代入
         point_cloud.normals = o3d.utility.Vector3dVector(normals)
 
@@ -386,8 +387,9 @@ class MakeSurface:
         o3d.visualization.draw_geometries([recMeshBPA])
 
         # 生成したメッシュをPLYファイルに保存
-        save_path = os.path.join(PROJECT_DIR_PATH, "work", 'output_mesh.ply')
+        save_path = os.path.join(DATA_DIR_PATH, "work", 'output_mesh.ply')
         o3d.io.write_triangle_mesh(save_path, recMeshBPA)
+        # """
 
 
 if __name__ == "__main__":
@@ -395,9 +397,9 @@ if __name__ == "__main__":
     start = time.time()
 
     massages = []
-    massages.append(f"SCRIPT_DIR_PATH  : {PLY_DIR_PATH}")
+    massages.append(f"SCRIPT_DIR_PATH  : {DATA_DIR_PATH}")
     massages.append(f"PROJECT_DIR_PATH : {PROJECT_DIR_PATH}")
-    massages.append(f"PLY_DIR_PATH     : {PLY_DIR_PATH}")
+    massages.append(f"DATA_DIR_PATH     : {DATA_DIR_PATH}")
 
     max_length = max(len(massage) for massage in massages)
     line = "_" * max_length
@@ -411,7 +413,7 @@ if __name__ == "__main__":
     file_name = "e50_p2048_airplane_01png.npy"
     # file_name = ""
 
-    ms = MakeSurface(point_file_dir=PLY_DIR_PATH,
+    ms = MakeSurface(point_file_dir=DATA_DIR_PATH,
                      point_file_name=file_name)
     ms.main()
 
